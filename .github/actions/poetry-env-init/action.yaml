@@ -1,0 +1,29 @@
+name: 'poetry-env-init'
+
+description: 'Initialise poetry environment'
+
+inputs:
+  python-version:
+    description: 'python version number'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: 'Setup python'
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: 'Install poetry'
+      run: curl -sSL https://install.python-poetry.org | python -
+      shell: bash
+
+    - name: 'Set poetry configs'
+      run: |
+        poetry config virtualenvs.create false
+      shell: bash
+
+    - name: 'Install dependencies'
+      run: poetry install --no-interaction --no-ansi
+      shell: bash
