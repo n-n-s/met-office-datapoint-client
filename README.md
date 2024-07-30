@@ -1,5 +1,7 @@
 # Met Office DataPoint client
 
+![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/n-n-s/01cf2885bd848463dd0318ae0bda4e9f/raw/test.json)
+
 A python client for the [Met Office DataPoint](https://www.metoffice.gov.uk/services/data/datapoint) service.
 This library is not authored or affiliated with the Met Office, but was created to conveniently obtain data from the
 Met Office DataPoint service using python.

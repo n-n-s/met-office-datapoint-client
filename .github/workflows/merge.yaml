@@ -1,0 +1,45 @@
+name: 'Tests'
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  python-version: '3.9'
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Install dependencies'
+        uses: ./.github/actions/poetry-env-init
+        with:
+          python-version: ${{ env.python-version }}
+
+      - name: 'Run lint check'
+        run: poetry run poe lint-check
+
+      - name: 'Run tests'
+        run: poetry run poe test
+
+      - name: 'Get coverage total'
+        run: |
+          export COV_TOTAL=$(poe test | grep 'TOTAL' | awk '{print $4}' | sed -r 's!%!!g')
+          echo "coverage_total=$COV_TOTAL" >> $GITHUB_ENV
+
+      - name: 'Create coverage badge'
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: 01cf2885bd848463dd0318ae0bda4e9f
+          filename: test.json
+          label: Coverage
+          message: ${{ env.coverage_total }}%
+          minColorRange: 50
+          maxColorRange: 90
+          valColorRange: ${{ env.coverage_total }}
