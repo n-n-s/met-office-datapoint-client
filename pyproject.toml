@@ -1,0 +1,69 @@
+[tool.poetry]
+name = "met-office-datapoint"
+version = "0.1.0"
+description = "Met Office DataPoint client"
+authors = ["Samuel Northover-Naylor"]
+readme = "README.md"
+packages = [
+    { include = "datapoint" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+requests = "^2.32.3"
+pydantic = "^2.8.2"
+
+[tool.poetry.group.dev.dependencies]
+python-dotenv = "^1.0.1"
+responses = "^0.25.3"
+pytest = "^8.3.2"
+poethepoet = "^0.27.0"
+ruff = "^0.5.5"
+coverage = "^7.6.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+
+[tool.poe.tasks]
+
+[tool.poe.tasks.lint]
+sequence = [
+    { shell = "poetry run ruff format ." },
+    { shell = "poetry run ruff check . --fix" }
+]
+
+[tool.poe.tasks.lint-check]
+sequence = [
+    { shell = "poetry run ruff format . --check" },
+    { shell = "poetry run ruff check ." }
+]
+
+[tool.poe.tasks.test]
+sequence = [
+    { shell = "poetry run coverage run -m pytest . ./tests" },
+    { shell = "poetry run coverage report -m" }
+]
+
+[tool.poe.tasks.all]
+sequence = ["lint-check", "test"]
