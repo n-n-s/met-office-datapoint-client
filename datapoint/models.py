@@ -1,8 +1,14 @@
 import datetime as dt
+import logging
 from typing import Optional
 
+import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
+
+from datapoint.utils import parse_timestamp
+
+logger = logging.getLogger(__name__)
 
 
 class BaseModelExtension(BaseModel):
@@ -69,3 +75,16 @@ class DvValue(BaseModel):
 class SiteRep(BaseModel):
     Wx: ObsParams
     DV: DvValue
+
+    def get_measurement_values(self) -> pd.DataFrame:
+        _df_list = []
+        for p in self.DV.location.period:
+            _midnight_timestamp = parse_timestamp(v=p.value)
+            for r in p.rep:
+                _data = r.dict()
+                _minutes_after_midnight = _data.pop("minutes_after_midnight")
+                _timestamp = _midnight_timestamp + pd.Timedelta(minutes=_minutes_after_midnight)
+                _df_list.append(pd.DataFrame(_data, index=[_timestamp]))
+        df = pd.concat(_df_list)
+        df.index.name = "dttimestamp"
+        return df

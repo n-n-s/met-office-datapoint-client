@@ -1,5 +1,7 @@
 import logging
 
+import numpy as np
+import pandas as pd
 import responses
 
 from datapoint import MetOfficeDataPointClient, models
@@ -237,3 +239,132 @@ def test_get_observations():
     expected = models.SiteRep.model_validate(fake_json["SiteRep"])
 
     assert actual == expected
+
+    actual_df = actual.get_measurement_values()
+
+    expected_df = pd.DataFrame(
+        [
+            {
+                "dttimestamp": pd.Timestamp("2024-07-29 11:00:00+0000", tz="UTC"),
+                "wind_direction": "N",
+                "dew_point": 14.3,
+                "screen_relative_humidity": 82.9,
+                "pressure": 1020.0,
+                "wind_speed": 3.0,
+                "temperature": 17.2,
+                "visibility": 26.0,
+                "wave_height": 0.6,
+                "wave_period": 8.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-29 12:00:00+0000", tz="UTC"),
+                "wind_direction": "N",
+                "dew_point": 14.2,
+                "screen_relative_humidity": 82.4,
+                "pressure": 1020.0,
+                "wind_speed": 4.0,
+                "temperature": 17.2,
+                "visibility": 26.0,
+                "wave_height": 0.7,
+                "wave_period": 7.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-29 13:00:00+0000", tz="UTC"),
+                "wind_direction": "N",
+                "dew_point": 13.8,
+                "screen_relative_humidity": 78.2,
+                "pressure": 1019.0,
+                "wind_speed": 5.0,
+                "temperature": 17.6,
+                "visibility": 26.0,
+                "wave_height": 0.5,
+                "wave_period": 8.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-29 14:00:00+0000", tz="UTC"),
+                "wind_direction": "N",
+                "dew_point": 15.0,
+                "screen_relative_humidity": 82.0,
+                "pressure": 1019.0,
+                "wind_speed": 7.0,
+                "temperature": 18.1,
+                "visibility": 26.0,
+                "wave_height": 0.5,
+                "wave_period": 8.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-29 15:00:00+0000", tz="UTC"),
+                "wind_direction": "N",
+                "dew_point": 15.6,
+                "screen_relative_humidity": 80.5,
+                "pressure": 1019.0,
+                "wind_speed": 5.0,
+                "temperature": 19.0,
+                "visibility": 10.0,
+                "wave_height": 0.5,
+                "wave_period": 7.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-29 16:00:00+0000", tz="UTC"),
+                "wind_direction": "N",
+                "dew_point": 15.3,
+                "screen_relative_humidity": 81.0,
+                "pressure": 1019.0,
+                "wind_speed": 9.0,
+                "temperature": 18.6,
+                "visibility": 10.0,
+                "wave_height": 0.5,
+                "wave_period": 7.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-29 17:00:00+0000", tz="UTC"),
+                "wind_direction": "NNW",
+                "dew_point": 15.7,
+                "screen_relative_humidity": 85.8,
+                "pressure": 1019.0,
+                "wind_speed": 6.0,
+                "temperature": 18.1,
+                "visibility": 5.0,
+                "wave_height": 0.5,
+                "wave_period": 7.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-30 09:00:00+0000", tz="UTC"),
+                "wind_direction": None,
+                "dew_point": 15.7,
+                "screen_relative_humidity": 92.0,
+                "pressure": 1017.0,
+                "wind_speed": np.nan,
+                "temperature": 17.0,
+                "visibility": 10.0,
+                "wave_height": 0.2,
+                "wave_period": 6.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-30 10:00:00+0000", tz="UTC"),
+                "wind_direction": "NNE",
+                "dew_point": 15.8,
+                "screen_relative_humidity": 92.0,
+                "pressure": 1017.0,
+                "wind_speed": 14.0,
+                "temperature": 17.1,
+                "visibility": 5.0,
+                "wave_height": 0.2,
+                "wave_period": 9.0,
+            },
+            {
+                "dttimestamp": pd.Timestamp("2024-07-30 11:00:00+0000", tz="UTC"),
+                "wind_direction": "NE",
+                "dew_point": 16.1,
+                "screen_relative_humidity": 92.7,
+                "pressure": 1017.0,
+                "wind_speed": 10.0,
+                "temperature": 17.3,
+                "visibility": 5.0,
+                "wave_height": 0.2,
+                "wave_period": 8.0,
+            },
+        ]
+    ).set_index("dttimestamp")
+
+    pd.testing.assert_frame_equal(actual_df, expected_df)

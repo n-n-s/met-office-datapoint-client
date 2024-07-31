@@ -20,6 +20,8 @@ from datapoint import MetOfficeDataPointClient
 
 with MetOfficeDataPointClient(os.environ["MET_OFFICE_API_KEY"]) as client:
     sites = client.get_site_list()
-    site_id = sites[0].id  # for example take the first site in the list of sites
-    observations = client.get_observations(site_id=site_id)
+    site_id = "162107"
+    obs = client.get_observations(site_id=site_id)
+
+df = obs.get_measurement_values()
 ```
