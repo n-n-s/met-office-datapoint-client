@@ -1,9 +1,9 @@
 import datetime as dt
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from pydantic.alias_generators import to_camel
 
 from datapoint.utils import parse_timestamp
@@ -56,6 +56,14 @@ class DvPeriod(BaseModel):
     type: str
     value: str
     rep: list[DvRep] = Field(alias="Rep")
+
+    @model_validator(mode="before")
+    @classmethod
+    def ensure_rep_is_a_list(cls, data: Any) -> Any:
+        _rep = data["Rep"]
+        if isinstance(_rep, dict):
+            data["Rep"] = [_rep]  # converts single entry into a list so that it is handled the same as list entries
+        return data
 
 
 class DvLocation(BaseModel):
