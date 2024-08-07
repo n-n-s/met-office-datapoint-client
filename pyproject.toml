@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "met-office-datapoint"
-version = "0.1.0"
+version = "0.1.1"
 description = "Met Office DataPoint client"
 authors = ["Samuel Northover-Naylor"]
 readme = "README.md"

@@ -22,3 +22,25 @@ def test_location():
         obs_source="FM-13 SHIP",
     )
     assert actual == expected
+
+
+class TestDvPeriod:
+    any_string = "anything"
+    any_int = 42
+    any_float = 0.1
+
+    def test_non_list_rep(self):
+        actual = models.DvPeriod(
+            type=self.any_string,
+            value=self.any_string,
+            Rep={
+                "$": self.any_int,
+                "D": self.any_string,
+                "S": self.any_float,
+                "Wh": self.any_float,
+                "Wp": self.any_float,
+            },
+        )
+
+        assert isinstance(actual.rep, list)
+        assert isinstance(actual.rep[0], models.DvRep)
