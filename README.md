@@ -1,5 +1,8 @@
 # Met Office DataPoint client
 
+> [!IMPORTANT]
+> [Met Office DataPoint](https://www.metoffice.gov.uk/services/data/datapoint) was **retired in December 2025** and as such this python client repo is archived.
+
 [![Tests](https://github.com/n-n-s/met-office-datapoint-client/actions/workflows/merge.yaml/badge.svg)](https://github.com/n-n-s/met-office-datapoint-client/actions/workflows/merge.yaml)
 
 A python client for the [Met Office DataPoint](https://www.metoffice.gov.uk/services/data/datapoint) service.
